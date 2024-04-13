@@ -1,0 +1,28 @@
+{
+  "name": "techinterviewguruservicecdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/lib/app.js",
+  "types": "dist/lib/app.d.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "aws-cdk": "^2.133.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.133.0",
+    "@aws-cdk/core": "*",
+    "constructs": "^10.3.0",
+    "source-map-support": "^0.5.21"
+  }
+}
