@@ -1,4 +1,4 @@
-import { Stack, StackProps, Stage } from "aws-cdk-lib";
+import { Stack, StackProps } from "aws-cdk-lib";
 import {
   CodePipeline,
   CodePipelineSource,
@@ -6,10 +6,7 @@ import {
 } from "aws-cdk-lib/pipelines";
 import { Construct } from "constructs";
 import { STAGES, StageProps } from "./stages";
-import {
-  CommonServiceStackProps,
-  StacksRetriver,
-} from "../infra-stacks/stack-retriever";
+import { TigPipelineAppStage } from "./pipeline-stage";
 
 export class TigPieline extends Stack {
   readonly servicePipeline: CodePipeline;
@@ -25,7 +22,10 @@ export class TigPieline extends Stack {
     const pipeline = new CodePipeline(this, id, {
       pipelineName: "tech-interview-guru-service",
       synth: new ShellStep("Synth", {
-        input: CodePipelineSource.gitHub("", ""),
+        input: CodePipelineSource.gitHub(
+          "tig-jliu/TechInterviewGuruBackend",
+          "main"
+        ),
         commands: [
           "cd TechInterviewGuruServiceCdk",
           "npm ci",
@@ -38,19 +38,13 @@ export class TigPieline extends Stack {
   }
 
   private addStage(scope: Construct, stageProps: StageProps) {
-    const stacksToDeployed = this.getAllStacks(scope, stageProps);
-    this.servicePipeline.addStage(new Stage(scope, stageProps.stage));
-  }
-
-  private getAllStacks(scope: Construct, stageProps: StageProps) {
-    const stackProps: CommonServiceStackProps = {
-      stackPrefix: "",
-      env: {
-        account: stageProps.accountId,
-        region: stageProps.region,
-      },
-      stage: stageProps.stage,
+    const deploymentStageProps = {
+      env: { account: stageProps.accountId, region: stageProps.region },
+      stageName: stageProps.stage
     };
-    return StacksRetriver.getStacks(scope, stackProps);
+
+    this.servicePipeline.addStage(
+      new TigPipelineAppStage(this, stageProps.stage, deploymentStageProps)
+    );
   }
 }
