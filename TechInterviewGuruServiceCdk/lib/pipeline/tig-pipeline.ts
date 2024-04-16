@@ -32,6 +32,7 @@ export class TigPieline extends Stack {
           "npm run build",
           "npx cdk synth",
         ],
+        primaryOutputDirectory: 'TechInterviewGuruServiceCdk/cdk.out'
       }),
     });
     return pipeline;
