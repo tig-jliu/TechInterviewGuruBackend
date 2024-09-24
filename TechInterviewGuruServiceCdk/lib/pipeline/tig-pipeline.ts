@@ -18,14 +18,19 @@ export class TigPieline extends Stack {
     }
   }
 
+private getCodePipelineSource(): CodePipelineSource {
+  return CodePipelineSource.connection(
+    "tig-jliu/TechInterviewGuruBackend",
+    "main",
+    { connectionArn: "arn:aws:codeconnections:us-west-2:211125456749:connection/995ec981-5b1d-4ecb-bb17-7bb4aa212770" }
+  );
+}
+
   private getPipeline(id: string): CodePipeline {
     const pipeline = new CodePipeline(this, id, {
       pipelineName: "tech-interview-guru-service",
       synth: new ShellStep("Synth", {
-        input: CodePipelineSource.gitHub(
-          "tig-jliu/TechInterviewGuruBackend",
-          "main"
-        ),
+        input: this.getCodePipelineSource(),
         commands: [
           "cd TechInterviewGuruServiceCdk",
           "npm ci",
