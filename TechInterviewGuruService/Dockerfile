@@ -3,4 +3,4 @@ RUN mkdir /app
 COPY $CODEBUILD_SRC_DIR/asset*/target/TechInterviewGuruService-1.0.0.jar /app/app.jar
 WORKDIR /app
 EXPOSE 8080
-ENTRYPOINT java -jar ./app.jar
+ENTRYPOINT java -jar app.jar
